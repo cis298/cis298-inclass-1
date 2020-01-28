@@ -1,5 +1,7 @@
 package edu.kvcc.cis298.geoquiz;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +22,7 @@ public class QuizActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
 
     // Array of questions to display
@@ -78,6 +81,30 @@ public class QuizActivity extends AppCompatActivity {
                 // Increment the index and mod by the array length
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+            }
+        });
+
+        // Setup Cheat Button
+        mCheatButton = (Button) findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start Cheat Activity
+
+                // Get whether the answer is true or not from current question.
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                // Call the static method on CheatActivity called newIntent that
+                // knows how to create a properly formatted Intent that this
+                // Activity can use to get CheatActivity started.
+                Intent intent = CheatActivity.newIntent(
+                        QuizActivity.this,
+                        answerIsTrue
+                );
+                // Tell the OS to start the activity described
+                // in our intent instance.
+                // startActivity talks directly to the OS in order
+                // to get the new Activity started.
+                startActivity(intent);
             }
         });
     }
